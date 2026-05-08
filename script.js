@@ -1,8 +1,6 @@
 const audio = document.querySelector("#tributeAudio");
-const playButton = document.querySelector("#playMusic");
-const playIcon = document.querySelector("#playIcon");
 const musicStatus = document.querySelector("#musicStatus");
-const musicFile = document.querySelector("#musicFile");
+const musicCover = document.querySelector("#musicCover");
 const letterButton = document.querySelector("#openLetter");
 const letterText = document.querySelector("#letterText");
 const lightbox = document.querySelector("#lightbox");
@@ -28,35 +26,15 @@ enterSite.addEventListener("click", async () => {
   await startTributeMusic("Tocando a musica da surpresa");
 });
 
-playButton.addEventListener("click", async () => {
-  if (audio.paused) {
-    await startTributeMusic("Tocando a musica da homenagem");
-  } else {
-    audio.pause();
-    playIcon.textContent = "\u25b6";
-    musicStatus.textContent = "Musica pausada";
-  }
-});
-
 audio.addEventListener("ended", () => {
-  playIcon.textContent = "\u25b6";
+  musicCover.classList.remove("is-spinning");
   musicStatus.textContent = "Musica finalizada";
-});
-
-musicFile.addEventListener("change", () => {
-  const [file] = musicFile.files;
-  if (!file) return;
-
-  audio.src = URL.createObjectURL(file);
-  audio.load();
-  playIcon.textContent = "\u25b6";
-  musicStatus.textContent = `Musica escolhida: ${file.name}`;
 });
 
 async function startTributeMusic(successMessage) {
   try {
     await audio.play();
-    playIcon.textContent = "\u2161";
+    musicCover.classList.add("is-spinning");
     musicStatus.textContent = successMessage;
   } catch {
     musicStatus.textContent =

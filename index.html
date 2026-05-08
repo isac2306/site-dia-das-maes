@@ -67,14 +67,12 @@
         </div>
 
         <div class="music-player">
-          <button class="play-button" id="playMusic" type="button" aria-label="Tocar música">
-            <span id="playIcon">▶</span>
-          </button>
+          <div class="music-cover" id="musicCover" aria-hidden="true">
+            <span>Tim Maia</span>
+          </div>
           <div>
             <h3 id="songTitle">Não Quero Dinheiro - Tim Maia</h3>
-            <p id="musicStatus">A música começa quando abrir a surpresa. Coloque o MP3 em assets/musica/nao-quero-dinheiro.mp3</p>
-            <label class="file-button" for="musicFile">Escolher MP3</label>
-            <input id="musicFile" class="music-file" type="file" accept="audio/mpeg,audio/mp3,audio/*" />
+            <p id="musicStatus">A música começa quando abrir a surpresa.</p>
           </div>
           <audio id="tributeAudio" src="assets/musica/nao-quero-dinheiro.mp3"></audio>
         </div>
