@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Para Mamãe querida</title>
+    <meta
+      name="description"
+      content="Um site interativo de Dia das Mães feito especialmente para Mamãe querida."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="surprise-screen" id="surpresa" aria-label="Surpresa para Mamãe querida">
+      <div class="surprise-content">
+        <p class="eyebrow">Um presente especial</p>
+        <h1>Uma surpresa para Mamãe querida</h1>
+        <p>
+          Prepare o coração: aqui tem música, lembranças e palavras feitas com
+          carinho para celebrar você.
+        </p>
+        <button class="button primary" id="enterSite" type="button">Abrir surpresa</button>
+      </div>
+    </section>
+
+    <header class="hero" id="inicio">
+      <nav class="topbar" aria-label="Navegação principal">
+        <a class="brand" href="#inicio">Mamãe querida</a>
+        <div class="nav-links">
+          <a href="#musica">Música</a>
+          <a href="#fotos">Fotos</a>
+          <a href="#dedicatorias">Dedicatórias</a>
+          <a href="#brincadeira">Brincadeira</a>
+          <a href="#carta">Carta</a>
+        </div>
+      </nav>
+
+      <div class="hero-copy">
+        <p class="eyebrow">Dia das Mães</p>
+        <h1>Para Mamãe querida</h1>
+        <p>
+          Um cantinho feito com carinho para guardar música, fotos, lembranças e
+          palavras bonitas para uma mãe muito especial.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#musica">Começar homenagem</a>
+          <a class="button ghost" href="#fotos">Ver memórias</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="music-section" id="musica">
+        <div class="section-copy">
+          <p class="eyebrow">Trilha sonora</p>
+          <h2>A música da Mamãe querida</h2>
+          <p>
+            Quando você escolher a música, ela vai tocar aqui e acompanhar a
+            homenagem.
+          </p>
+        </div>
+
+        <div class="music-player">
+          <button class="play-button" id="playMusic" type="button" aria-label="Tocar música">
+            <span id="playIcon">▶</span>
+          </button>
+          <div>
+            <h3 id="songTitle">Não Quero Dinheiro - Tim Maia</h3>
+            <p id="musicStatus">A música começa quando abrir a surpresa. Coloque o MP3 em assets/musica/nao-quero-dinheiro.mp3</p>
+            <label class="file-button" for="musicFile">Escolher MP3</label>
+            <input id="musicFile" class="music-file" type="file" accept="audio/mpeg,audio/mp3,audio/*" />
+          </div>
+          <audio id="tributeAudio" src="assets/musica/nao-quero-dinheiro.mp3"></audio>
+        </div>
+      </section>
+
+      <section class="photo-section" id="fotos" aria-labelledby="fotos-title">
+        <div class="section-heading">
+          <p class="eyebrow">Memórias</p>
+          <h2 id="fotos-title">Fotos que contam a história dela</h2>
+        </div>
+
+        <div class="gallery" id="gallery">
+          <button class="photo-card" type="button" data-full="assets/fotos/foto-1.jpg">
+            <img src="assets/fotos/foto-1.jpg" alt="Mamãe querida com a família em uma comemoração" />
+            <span>Família reunida</span>
+          </button>
+          <button class="photo-card" type="button" data-full="assets/fotos/foto-2.jpg">
+            <img src="assets/fotos/foto-2.jpg" alt="Mamãe querida em um momento carinhoso de aniversário" />
+            <span>Carinho de perto</span>
+          </button>
+          <button class="photo-card" type="button" data-full="assets/fotos/foto-3.jpg">
+            <img src="assets/fotos/foto-3.jpg" alt="Mamãe querida em um passeio com pessoas queridas" />
+            <span>Memória especial</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="dedication-section" id="dedicatorias">
+        <div class="section-copy">
+          <p class="eyebrow">Dedicatórias</p>
+          <h2>Pequenas frases para ela</h2>
+          <p>
+            Clique nos cartões para revelar mensagens carinhosas para Mamãe querida.
+          </p>
+        </div>
+
+        <div class="dedication-grid">
+          <button class="dedication-card" type="button">
+            <span>01</span>
+            <strong>Seu cuidado</strong>
+            <p>Mamãe querida, seu cuidado deixa qualquer dia mais leve.</p>
+          </button>
+          <button class="dedication-card" type="button">
+            <span>02</span>
+            <strong>Seu amor</strong>
+            <p>Seu amor aparece nos detalhes, nas palavras e nos abraços.</p>
+          </button>
+          <button class="dedication-card" type="button">
+            <span>03</span>
+            <strong>Sua presença</strong>
+            <p>Ter você por perto é sentir casa, calma e alegria.</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="game-section" id="brincadeira">
+        <div class="section-copy">
+          <p class="eyebrow">Brincadeira</p>
+          <h2>Uma pergunta importante</h2>
+          <p>
+            Responda com sinceridade, mas cuidado: esse site sabe qual é a
+            resposta certa.
+          </p>
+        </div>
+
+        <div class="love-game" id="loveGame">
+          <h3>Algum dia você vai deixar de me amar?</h3>
+          <div class="game-board" id="gameBoard">
+            <div class="game-actions">
+              <div class="reveal-choice">
+                <button class="choice-button draggable" id="dragYes" type="button">
+                  Sim
+                </button>
+                <button class="choice-button no-button" id="hiddenNo" type="button">
+                  Não
+                </button>
+              </div>
+              <button class="choice-button runner" id="runawayYes" type="button">
+                Sim
+              </button>
+            </div>
+            <div class="trash-zone" id="trashZone" aria-label="Área de descarte do sim">
+              <div class="trash-can" aria-hidden="true">
+                <span class="trash-lid"></span>
+                <span class="trash-rim"></span>
+                <span class="trash-body"></span>
+              </div>
+              <strong>Descarte do sim</strong>
+            </div>
+          </div>
+          <p class="game-message" id="gameMessage">
+            Dica: arraste um “sim” para a lixeira e veja a resposta de verdade.
+          </p>
+        </div>
+      </section>
+
+      <section class="letter-section" id="carta">
+        <div>
+          <p class="eyebrow">Carta</p>
+          <h2>Uma mensagem especial</h2>
+          <p>
+            Esta parte pode virar a dedicatória principal do site. Depois vamos
+            trocar o texto pelo que você quiser dizer para ela.
+          </p>
+        </div>
+
+        <div class="letter-card">
+          <button class="button primary" id="openLetter" type="button">Abrir carta</button>
+          <div class="letter-text" id="letterText" hidden>
+            <p>Mamãe querida,</p>
+            <p>
+              este site foi feito para lembrar que você é amada de um jeito
+              enorme. Obrigado por cada gesto de carinho, cada conselho, cada
+              cuidado e por tudo que você representa.
+            </p>
+            <p>Feliz Dia das Mães. Que hoje você receba todo o amor que merece.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button class="lightbox-close" id="closeLightbox" type="button" aria-label="Fechar foto">
+        ×
+      </button>
+      <img id="lightboxImage" alt="Foto ampliada da Valentina" />
+    </div>
+
+    <div class="site-celebration" id="siteCelebration" hidden aria-live="polite">
+      <div class="celebration-message">Eu te amo tanto minha mamãe</div>
+    </div>
+
+    <footer>
+      <p>Feito especialmente para Valentina Albuquerque.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
