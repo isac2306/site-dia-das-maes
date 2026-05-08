@@ -88,7 +88,6 @@ dragYes.addEventListener("pointerdown", (event) => {
   startPaperDrag(event, dragYes);
 });
 
-eruptYes.addEventListener("pointerenter", eruptYesButton);
 eruptYes.addEventListener("pointerdown", eruptYesButton);
 eruptYes.addEventListener("click", eruptYesButton);
 
@@ -110,6 +109,9 @@ document.addEventListener("pointerup", (event) => {
     trashPaper(dragState.active);
   } else {
     gameMessage.textContent = "Quase. Leve a bolinha ate a lata de lixo.";
+    if (dragState.active === dragYes) {
+      gameBoard.classList.remove("is-throwing-paper");
+    }
   }
 
   trashZone.classList.remove("is-ready");
@@ -139,6 +141,9 @@ function startPaperDrag(event, button) {
 
   moveIntoBoard(button);
   button.classList.add("is-paper");
+  if (button === dragYes) {
+    gameBoard.classList.add("is-throwing-paper");
+  }
   button.style.position = "absolute";
   button.style.left = `${dragState.startLeft}px`;
   button.style.top = `${dragState.startTop}px`;
@@ -178,6 +183,9 @@ function trashPaper(button) {
   window.setTimeout(() => {
     button.style.display = "none";
     trashZone.classList.remove("is-eating", "is-ready");
+    if (button === dragYes) {
+      gameBoard.classList.remove("is-throwing-paper");
+    }
   }, 320);
 }
 
