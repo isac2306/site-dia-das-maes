@@ -84,26 +84,13 @@ const dragState = {
   startTop: 0,
 };
 
-const runnerState = {
-  placed: false,
-  left: 0,
-  top: 0,
-};
-
 dragYes.addEventListener("pointerdown", (event) => {
   startPaperDrag(event, dragYes);
 });
 
-runawayYes.addEventListener("pointerdown", (event) => {
-  startPaperDrag(event, runawayYes);
-});
-
-runawayYes.addEventListener("click", () => {
-  if (runawayYes.classList.contains("is-trashed")) return;
-  gameMessage.textContent = "Empurre esse sim com o cursor ate a lata ou segure para amassar.";
-});
-
-gameBoard.addEventListener("pointermove", guideRunawayYes);
+runawayYes.addEventListener("pointerenter", explodeRunawayYes);
+runawayYes.addEventListener("pointerdown", explodeRunawayYes);
+runawayYes.addEventListener("click", explodeRunawayYes);
 
 gameBoard.addEventListener("pointerleave", () => {
   if (!dragState.active) trashZone.classList.remove("is-ready");
@@ -158,82 +145,7 @@ function startPaperDrag(event, button) {
   button.style.transform = "none";
   button.setPointerCapture(event.pointerId);
 
-  if (button === runawayYes) {
-    runnerState.placed = true;
-    runnerState.left = dragState.startLeft;
-    runnerState.top = dragState.startTop;
-  }
-
   gameMessage.textContent = "Boa. Agora jogue essa bolinha de papel na lata de lixo.";
-}
-
-function guideRunawayYes(event) {
-  if (
-    dragState.active ||
-    runawayYes.classList.contains("is-paper") ||
-    runawayYes.classList.contains("is-trashed")
-  ) {
-    return;
-  }
-
-  ensureRunnerInBoard();
-
-  const boardBox = gameBoard.getBoundingClientRect();
-  const pointerX = event.clientX - boardBox.left;
-  const pointerY = event.clientY - boardBox.top;
-  const width = runawayYes.offsetWidth;
-  const height = runawayYes.offsetHeight;
-  const centerX = runnerState.left + width / 2;
-  const centerY = runnerState.top + height / 2;
-  const diffX = centerX - pointerX;
-  const diffY = centerY - pointerY;
-  const distance = Math.max(1, Math.hypot(diffX, diffY));
-  const influence = 170;
-
-  if (distance > influence) {
-    trashZone.classList.remove("is-ready");
-    return;
-  }
-
-  const force = (influence - distance) / influence;
-  const step = 22 + force * 58;
-  const nextLeft = runnerState.left + (diffX / distance) * step;
-  const nextTop = runnerState.top + (diffY / distance) * step;
-  const clamped = clampToBoard(nextLeft, nextTop, runawayYes);
-
-  runnerState.left = clamped.left;
-  runnerState.top = clamped.top;
-  runawayYes.style.left = `${clamped.left}px`;
-  runawayYes.style.top = `${clamped.top}px`;
-  gameMessage.textContent = "Isso: empurre pelo lado certo para orientar o sim ate a lata.";
-
-  const nearTrash = isPositionInTrashZone(clamped.left, clamped.top, runawayYes, 22);
-  trashZone.classList.toggle("is-ready", nearTrash);
-
-  if (isPositionInTrashZone(clamped.left, clamped.top, runawayYes, -6)) {
-    runawayYes.classList.add("is-paper");
-    trashPaper(runawayYes, "flee");
-  }
-}
-
-function ensureRunnerInBoard() {
-  if (runnerState.placed) return;
-
-  const buttonBox = runawayYes.getBoundingClientRect();
-  const boardBox = gameBoard.getBoundingClientRect();
-  const initial = clampToBoard(
-    buttonBox.left - boardBox.left,
-    buttonBox.top - boardBox.top,
-    runawayYes
-  );
-
-  moveIntoBoard(runawayYes);
-  runawayYes.classList.add("is-roaming");
-  runawayYes.style.left = `${initial.left}px`;
-  runawayYes.style.top = `${initial.top}px`;
-  runnerState.left = initial.left;
-  runnerState.top = initial.top;
-  runnerState.placed = true;
 }
 
 function movePaperBall(event) {
@@ -244,14 +156,9 @@ function movePaperBall(event) {
 
   button.style.left = `${clamped.left}px`;
   button.style.top = `${clamped.top}px`;
-
-  if (button === runawayYes) {
-    runnerState.left = clamped.left;
-    runnerState.top = clamped.top;
-  }
 }
 
-function trashPaper(button, mode = "drag") {
+function trashPaper(button) {
   const trashBox = trashZone.getBoundingClientRect();
   const boardBox = gameBoard.getBoundingClientRect();
   const targetLeft = trashBox.left - boardBox.left + trashBox.width / 2 - button.offsetWidth / 2;
@@ -264,8 +171,6 @@ function trashPaper(button, mode = "drag") {
 
   if (button === dragYes) {
     gameMessage.textContent = "A lata engoliu o sim falso. Agora o nao ficou livre.";
-  } else if (mode === "flee") {
-    gameMessage.textContent = "Voce guiou o sim fujao direto para a lata. Perfeito.";
   } else {
     gameMessage.textContent = "Pegou o sim fujao e jogou no lixo. Muito melhor assim.";
   }
@@ -281,6 +186,40 @@ function moveIntoBoard(button) {
   gameBoard.appendChild(button);
 }
 
+function explodeRunawayYes(event) {
+  if (runawayYes.classList.contains("is-exploded")) return;
+  event.preventDefault();
+
+  const buttonBox = runawayYes.getBoundingClientRect();
+  const boardBox = gameBoard.getBoundingClientRect();
+  const originX = buttonBox.left - boardBox.left + buttonBox.width / 2;
+  const originY = buttonBox.top - boardBox.top + buttonBox.height / 2;
+
+  runawayYes.classList.add("is-exploded");
+  runawayYes.style.pointerEvents = "none";
+  gameMessage.textContent = "Esse sim nao aguentou a verdade e explodiu.";
+
+  for (let index = 0; index < 24; index += 1) {
+    const shard = document.createElement("span");
+    const angle = (Math.PI * 2 * index) / 24;
+    const distance = 46 + Math.random() * 104;
+    const x = Math.cos(angle) * distance;
+    const y = Math.sin(angle) * distance;
+
+    shard.className = "yes-shard";
+    shard.textContent = index % 6 === 0 ? "Sim" : "";
+    shard.style.left = `${originX}px`;
+    shard.style.top = `${originY}px`;
+    shard.style.setProperty("--x", `${x}px`);
+    shard.style.setProperty("--y", `${y}px`);
+    shard.style.setProperty("--r", `${Math.floor(Math.random() * 460 - 230)}deg`);
+    shard.style.setProperty("--delay", `${Math.random() * 90}ms`);
+    gameBoard.appendChild(shard);
+
+    window.setTimeout(() => shard.remove(), 900);
+  }
+}
+
 function clampToBoard(left, top, button) {
   const padding = 16;
   const maxLeft = gameBoard.clientWidth - button.offsetWidth - padding;
@@ -290,24 +229,6 @@ function clampToBoard(left, top, button) {
     left: Math.max(padding, Math.min(maxLeft, left)),
     top: Math.max(padding, Math.min(maxTop, top)),
   };
-}
-
-function isPositionInTrashZone(left, top, button, margin = 0) {
-  const trashBox = trashZone.getBoundingClientRect();
-  const boardBox = gameBoard.getBoundingClientRect();
-  const centerX = left + button.offsetWidth / 2;
-  const centerY = top + button.offsetHeight / 2;
-  const trashLeft = trashBox.left - boardBox.left - margin;
-  const trashRight = trashBox.right - boardBox.left + margin;
-  const trashTop = trashBox.top - boardBox.top - margin;
-  const trashBottom = trashBox.bottom - boardBox.top + margin;
-
-  return (
-    centerX >= trashLeft &&
-    centerX <= trashRight &&
-    centerY >= trashTop &&
-    centerY <= trashBottom
-  );
 }
 
 function isOverTrash(clientX, clientY) {
