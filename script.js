@@ -10,7 +10,7 @@ const surpriseScreen = document.querySelector("#surpresa");
 const enterSite = document.querySelector("#enterSite");
 const dragYes = document.querySelector("#dragYes");
 const hiddenNo = document.querySelector("#hiddenNo");
-const runawayYes = document.querySelector("#runawayYes");
+const eruptYes = document.querySelector("#eruptYes");
 const loveGame = document.querySelector("#loveGame");
 const gameBoard = document.querySelector("#gameBoard");
 const gameMessage = document.querySelector("#gameMessage");
@@ -88,9 +88,9 @@ dragYes.addEventListener("pointerdown", (event) => {
   startPaperDrag(event, dragYes);
 });
 
-runawayYes.addEventListener("pointerenter", explodeRunawayYes);
-runawayYes.addEventListener("pointerdown", explodeRunawayYes);
-runawayYes.addEventListener("click", explodeRunawayYes);
+eruptYes.addEventListener("pointerenter", eruptYesButton);
+eruptYes.addEventListener("pointerdown", eruptYesButton);
+eruptYes.addEventListener("click", eruptYesButton);
 
 gameBoard.addEventListener("pointerleave", () => {
   if (!dragState.active) trashZone.classList.remove("is-ready");
@@ -186,37 +186,63 @@ function moveIntoBoard(button) {
   gameBoard.appendChild(button);
 }
 
-function explodeRunawayYes(event) {
-  if (runawayYes.classList.contains("is-exploded")) return;
+function eruptYesButton(event) {
+  if (eruptYes.classList.contains("is-exploded")) return;
   event.preventDefault();
 
-  const buttonBox = runawayYes.getBoundingClientRect();
+  const buttonBox = eruptYes.getBoundingClientRect();
   const boardBox = gameBoard.getBoundingClientRect();
   const originX = buttonBox.left - boardBox.left + buttonBox.width / 2;
   const originY = buttonBox.top - boardBox.top + buttonBox.height / 2;
 
-  runawayYes.classList.add("is-exploded");
-  runawayYes.style.pointerEvents = "none";
-  gameMessage.textContent = "Esse sim nao aguentou a verdade e explodiu.";
+  eruptYes.classList.add("is-exploded");
+  eruptYes.style.pointerEvents = "none";
+  gameMessage.textContent = "Esse sim entrou em erupcao e sumiu.";
 
-  for (let index = 0; index < 24; index += 1) {
-    const shard = document.createElement("span");
-    const angle = (Math.PI * 2 * index) / 24;
-    const distance = 46 + Math.random() * 104;
-    const x = Math.cos(angle) * distance;
-    const y = Math.sin(angle) * distance;
+  const shockwave = document.createElement("span");
+  shockwave.className = "eruption-shockwave";
+  shockwave.style.left = `${originX}px`;
+  shockwave.style.top = `${originY}px`;
+  gameBoard.appendChild(shockwave);
+  window.setTimeout(() => shockwave.remove(), 900);
 
-    shard.className = "yes-shard";
-    shard.textContent = index % 6 === 0 ? "Sim" : "";
-    shard.style.left = `${originX}px`;
-    shard.style.top = `${originY}px`;
-    shard.style.setProperty("--x", `${x}px`);
-    shard.style.setProperty("--y", `${y}px`);
-    shard.style.setProperty("--r", `${Math.floor(Math.random() * 460 - 230)}deg`);
-    shard.style.setProperty("--delay", `${Math.random() * 90}ms`);
-    gameBoard.appendChild(shard);
+  const flame = document.createElement("span");
+  flame.className = "volcano-flame";
+  flame.style.left = `${originX}px`;
+  flame.style.top = `${originY}px`;
+  gameBoard.appendChild(flame);
+  window.setTimeout(() => flame.remove(), 1200);
 
-    window.setTimeout(() => shard.remove(), 900);
+  for (let index = 0; index < 9; index += 1) {
+    const smoke = document.createElement("span");
+    smoke.className = "smoke-cloud";
+    smoke.style.left = `${originX + (Math.random() * 42 - 21)}px`;
+    smoke.style.top = `${originY}px`;
+    smoke.style.setProperty("--x", `${Math.random() * 120 - 60}px`);
+    smoke.style.setProperty("--y", `${-80 - Math.random() * 100}px`);
+    smoke.style.setProperty("--s", `${0.9 + Math.random() * 0.9}`);
+    smoke.style.setProperty("--delay", `${Math.random() * 130}ms`);
+    gameBoard.appendChild(smoke);
+    window.setTimeout(() => smoke.remove(), 1300);
+  }
+
+  for (let index = 0; index < 48; index += 1) {
+    const lava = document.createElement("span");
+    const spread = Math.random() * 190 - 95;
+    const height = -120 - Math.random() * 190;
+
+    lava.className = index % 5 === 0 ? "lava-rock" : "lava-splash";
+    lava.textContent = index % 9 === 0 ? "Sim" : "";
+    lava.style.left = `${originX}px`;
+    lava.style.top = `${originY}px`;
+    lava.style.setProperty("--x", `${spread}px`);
+    lava.style.setProperty("--y", `${height}px`);
+    lava.style.setProperty("--fall", `${110 + Math.random() * 150}px`);
+    lava.style.setProperty("--r", `${Math.floor(Math.random() * 520 - 260)}deg`);
+    lava.style.setProperty("--delay", `${Math.random() * 120}ms`);
+    gameBoard.appendChild(lava);
+
+    window.setTimeout(() => lava.remove(), 1650);
   }
 }
 
