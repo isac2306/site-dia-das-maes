@@ -10,7 +10,3 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
-
-# Música protegida por direitos autorais
-# Remova esta linha se você tiver autorização para publicar o MP3.
-assets/musica/*.mp3

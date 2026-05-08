@@ -49,8 +49,7 @@ O player está configurado para procurar:
 assets/musica/nao-quero-dinheiro.mp3
 ```
 
-Importante: se for publicar o site no GitHub Pages, use apenas músicas que você
-tem autorização para publicar.
+O arquivo de música faz parte do projeto para tocar junto com a homenagem.
 
 ## Arquivos principais
 
